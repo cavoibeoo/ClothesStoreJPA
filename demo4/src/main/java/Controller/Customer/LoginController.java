@@ -165,14 +165,15 @@ public class LoginController extends HttpServlet {
             }
             // if cookie exists, create User object and go to Downloads page
             else {
+                // Tmp, nữa sửa theo cách chính quy
                 user = (CustomerEntity) session.getAttribute("user");
                 session.setAttribute("user", user);
-                url = "/Home.jsp";
+                url = "/customer-account.jsp";
             }
         }
         
         else {
-            url = "/Home.jsp";
+            url = "/customer-account.jsp";
         }
         return url;
     }

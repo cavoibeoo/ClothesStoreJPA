@@ -37,7 +37,7 @@ public class CartController extends HttpServlet {
         HttpSession session = req.getSession();
         
         if (session.getAttribute("user") == null){
-            String url = "/login";
+            String url = "/login.jsp";
             req.getRequestDispatcher(url).forward(req, resp);
         };
         
@@ -90,6 +90,7 @@ public class CartController extends HttpServlet {
         // If product existed then increase quantity, else add product to cart
         if (cartProduct != null){
             cartProduct.setCartItemQuantity(cartProduct.getCartItemQuantity() + quantity);
+            cartProduct.setCartItemUnitPrice(cartProduct.getCartItemQuantity() * cartProduct.getProduct().getProductPrice() );
             if (cartProduct.getCartItemQuantity() <= 0){
                 cartItemService.delete(cartProduct.getCartItemId());
             }

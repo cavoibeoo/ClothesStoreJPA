@@ -12,6 +12,24 @@ import java.util.List;
 
 public class OrderServiceImpl implements OrderService {
     @Override
+    public void create(OrderEntity order) {
+        EntityManager enma = JpaConfig.getEntityManager();
+        EntityTransaction trans = enma.getTransaction();
+        try{
+            trans.begin();
+            enma.persist(order);
+            trans.commit();
+        }catch (Exception ex)
+        {
+            ex.printStackTrace();
+            trans.rollback();
+            throw ex;
+        }finally {
+            enma.close();
+        }
+    }
+    
+    @Override
     public void update(OrderEntity order)
     {
         EntityManager enma = JpaConfig.getEntityManager();
@@ -60,6 +78,16 @@ public class OrderServiceImpl implements OrderService {
         EntityManager enma = JpaConfig.getEntityManager();
         return enma.find(OrderEntity.class,orderId);
     }
+    
+    @Override
+    public List<OrderEntity> findByCustomerId(int customerId) {
+        EntityManager enma = JpaConfig.getEntityManager();
+        String jpql = "SELECT o FROM OrderEntity o where o.customer.id = :id";
+        TypedQuery<OrderEntity> query = enma.createQuery(jpql, OrderEntity.class);
+        query.setParameter("id",customerId);
+        return query.getResultList();
+    }
+    
     @Override
     public List<OrderEntity> findAll(){
         EntityManager enma = JpaConfig.getEntityManager();

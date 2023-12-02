@@ -83,7 +83,7 @@
 												</a>
 											</div>
 										</td>
-										<td class="column-5">$ <%= product.getProductPrice()*currentQuantity %></td>
+										<td class="column-5">$ <%= cartItem.getCartItemUnitPrice() %></td>
 									</tr>
 									<% } %>
 								<% } %>

@@ -95,15 +95,16 @@ public class ProductServiceImpl implements ProductService {
     }
     
     @Override
-    public ProductEntity findByColorSize(String productName, int colorId, int sizeId) {
+    public ProductEntity findByColorSize(String productName, int sizeId, int colorId) {
         EntityManager enma = JpaConfig.getEntityManager();
         String jpql = "SELECT p FROM ProductEntity p WHERE p.productName = :productName " +
-                              "AND p.size.id = :sizeId AND p.color.id = :colorId ";
+                              "AND p.size.sizeId = :sizeId AND p.color.colorId = :colorId ";
         TypedQuery<ProductEntity> query = enma.createQuery(jpql,ProductEntity.class);
         query.setParameter("productName", productName);
         query.setParameter("sizeId", sizeId);
         query.setParameter("colorId", colorId);
-        return query.getResultList().get(0);
+        if (query.getSingleResult() == null ) return null;
+        return query.getSingleResult();
     }
     
     @Override

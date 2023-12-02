@@ -8,25 +8,24 @@ public class OrderDetail {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long oderDetailId;
     int orderDetailQuantity;
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "orderId")
     private OrderEntity order;
 
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "productId")
     private ProductEntity product;
-    private int orderdetailQuantity;
     public OrderDetail() {
     }
-
-    public OrderDetail(Long oderDetailId, int orderDetailQuantity, OrderEntity order, ProductEntity product, int orderdetailQuantity) {
+    
+    public OrderDetail(Long oderDetailId, int orderDetailQuantity, OrderEntity order, ProductEntity product) {
         this.oderDetailId = oderDetailId;
         this.orderDetailQuantity = orderDetailQuantity;
         this.order = order;
         this.product = product;
-        this.orderdetailQuantity = orderdetailQuantity;
     }
-
+    
     public Long getOderDetailId() {
         return oderDetailId;
     }
@@ -34,15 +33,15 @@ public class OrderDetail {
     public void setOderDetailId(Long oderDetailId) {
         this.oderDetailId = oderDetailId;
     }
-
+    
     public int getOrderDetailQuantity() {
         return orderDetailQuantity;
     }
-
+    
     public void setOrderDetailQuantity(int orderDetailQuantity) {
         this.orderDetailQuantity = orderDetailQuantity;
     }
-
+    
     public OrderEntity getOrder() {
         return order;
     }
@@ -58,12 +57,5 @@ public class OrderDetail {
     public void setProduct(ProductEntity product) {
         this.product = product;
     }
-
-    public int getOrderdetailQuantity() {
-        return orderdetailQuantity;
-    }
-
-    public void setOrderdetailQuantity(int orderdetailQuantity) {
-        this.orderdetailQuantity = orderdetailQuantity;
-    }
+    
 }

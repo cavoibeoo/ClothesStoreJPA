@@ -18,7 +18,7 @@ public interface ProductService {
     
     List<ProductEntity> findByName(String productName);
     
-    ProductEntity findByColorSize(String productName ,int colorId, int sizeId);
+    ProductEntity findByColorSize(String productName, int sizeId,int colorId);
     
     SizeEntity findSizeById(int sizeId);
     ColorEntity findColorsById(int colorId);

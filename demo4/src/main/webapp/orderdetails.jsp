@@ -58,13 +58,13 @@
                                                     var selectedValue = this.value;
 
                                                     if (selectedValue === '1') {
-                                                        document.getElementById('billing_address_full_name').value = ''; // Clear the specific field value
-                                                        document.getElementById('billing_address_phone').value = ''; // Clear the specific field value
+                                                        /*document.getElementById('billing_address_full_name').value = ''; // Clear the specific field value
+                                                        document.getElementById('billing_address_phone').value = '';*/ // Clear the specific field value
                                                         document.getElementById('billing_address_address1').value = ''; // Clear the specific field value
                                                     }
                                                     else {
-                                                        document.getElementById('billing_address_full_name').value = '<%=currCustomer.getCustomerFName()+currCustomer.getCustomerLName()%>'; // Clear the specific field value
-                                                        document.getElementById('billing_address_phone').value = '<%=currCustomer.getCustomerPhone()%>'; // Clear the specific field value
+                                                        /*document.getElementById('billing_address_full_name').value = '<%=currCustomer.getCustomerFName()+currCustomer.getCustomerLName()%>'; // Clear the specific field value
+                                                        document.getElementById('billing_address_phone').value = '<%=currCustomer.getCustomerPhone()%>'; // Clear the specific field value*/
                                                         document.getElementById('billing_address_address1').value = '<%=currCustomer.getCustomerAddress()%>'; // Clear the specific field value
                                                     }
                                                 });
@@ -75,7 +75,7 @@
                                     <div class="field field-required  field-show-floating-label">
                                         <div class="field-input-wrapper">
                                             <label class="field-label" for="billing_address_full_name">Full Name</label>
-                                            <input placeholder="Full Name" autocapitalize="off" spellcheck="false" class="field-input" size="30" type="text"
+                                            <input readonly placeholder="Full Name" autocapitalize="off" spellcheck="false" class="field-input" size="30" type="text"
                                                    id="billing_address_full_name" name="billing_address[full_name]"
                                                    value="<%=currCustomer.getCustomerFName()+currCustomer.getCustomerLName()%>" autocomplete="false">
                                         </div>
@@ -83,7 +83,7 @@
                                     <div class="field field-required field-show-floating-label">
                                         <div class="field-input-wrapper">
                                             <label class="field-label" for="billing_address_phone">Phone number</label>
-                                            <input autocomplete="false" placeholder="Phone number" autocapitalize="off" spellcheck="false" class="field-input" size="30" maxlength="15" type="tel"
+                                            <input readonly autocomplete="false" placeholder="Phone number" autocapitalize="off" spellcheck="false" class="field-input" size="30" maxlength="15" type="tel"
                                                    id="billing_address_phone" name="billing_address[phone]"
                                                    value="<%=currCustomer.getCustomerPhone()%>">
                                         </div>
@@ -220,12 +220,12 @@
 
                                 <tr class="total-line">
                                     <td class="total-line-name payment-due-label">
-                                        <span class="payment-due-label-total">Discount</span>
+                                        <span class="payment-due-label-total">Shipping: </span>
                                     </td>
                                     <td class="total-line-name payment-due">
                                         <span class="payment-due-currency">USD</span>
                                         <span class="payment-due-price" data-checkout-payment-due-target="144400000">
-                                                <%=0%>
+                                                $<%=9%>
                                             </span>
                                     </td>
                                 </tr>
@@ -239,7 +239,7 @@
                                     <td class="total-line-name payment-due">
                                         <span class="payment-due-currency">USD</span>
                                         <span class="payment-due-price" data-checkout-payment-due-target="144400000">
-                                                <%=tempPrice - 0%>
+                                                <%=tempPrice + 9%>
                                         </span>
                                     </td>
                                 </tr>

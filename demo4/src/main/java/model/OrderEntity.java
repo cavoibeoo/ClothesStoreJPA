@@ -1,6 +1,11 @@
 package model;
 
 import javax.persistence.*;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
 
@@ -9,21 +14,27 @@ public class OrderEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int orderId;
-    private Date orderDate;
+    private Date orderDate; // Auto create when create object
     private Date orderDeliveryDate;
     private float orderTotal;
     private float orderDiscount;
-    private String orderStatus; //cancel, is delivery, 2 is done
-    private boolean isAccepted;
+    private float orderShipping;
+    private String orderStatus; //Cancel, Shipping and Complete
+    private boolean isAccepted; // default is false
     private String orderPaymentMethod;
+    private String shippingAddress; //default is customerAddress
     
     @ManyToOne
     @JoinColumn(name = "customerId")
     private CustomerEntity customer;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "order",fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.MERGE, mappedBy = "order",fetch = FetchType.EAGER)
     private List<OrderDetail> orderDetailList;
 
+    //  Auto generate orderDate, orderStatus, isAccepted default is false
     public OrderEntity() {
+        LocalDateTime ldt = LocalDateTime.now();
+        this.orderDate = Date.from(ldt.atZone(ZoneId.systemDefault()).toInstant());
+        this.isAccepted = false;
     }
 
     public OrderEntity(int orderId, Date orderDate, Date orderDeliveryDate, float orderTotal, float orderDiscount, String orderStatus, boolean isAccepted, String orderPaymentMethod, CustomerEntity customer, List<OrderDetail> orderDetailList) {
@@ -79,6 +90,14 @@ public class OrderEntity {
         this.orderDiscount = orderDiscount;
     }
     
+    public float getOrderShipping() {
+        return orderShipping;
+    }
+    
+    public void setOrderShipping(float orderShipping) {
+        this.orderShipping = orderShipping;
+    }
+    
     public String getOrderStatus() {
         return orderStatus;
     }
@@ -118,5 +137,13 @@ public class OrderEntity {
 
     public void setOrderDetailList(List<OrderDetail> orderDetailList) {
         this.orderDetailList = orderDetailList;
+    }
+    
+    public String getShippingAddress() {
+        return shippingAddress;
+    }
+    
+    public void setShippingAddress(String shippingAddress) {
+        this.shippingAddress = shippingAddress;
     }
 }
