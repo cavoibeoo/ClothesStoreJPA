@@ -20,7 +20,7 @@
 		</div>
 	</div>
 	<!-- Shoping Cart -->
-	<form class="bg0 p-t-75 p-b-85" action = "order" method="post">
+	<form class="bg0 p-t-75 p-b-85" action = "order" method="post" id="myForm">
 		<div class="container">
 			<div class="row">
 				<div class="col-lg-10 col-xl-7 m-lr-auto m-b-50">
@@ -46,7 +46,6 @@
 										window.onload = function() {
 											// Get the button element by its ID
 											var cancelButton = document.getElementById('cancelButtonSpecial');
-
 											// Simulate a click event on the button
 											cancelButton.click();
 										};
@@ -77,14 +76,29 @@
 									%>
 									<tr class="table_row">
 										<td class="column-0" style="">
-											<input class="ui-checkbox" type = checkbox name="checkedProduct" value="<%=cartItem.getCartItemId()%>">
+											<input class="ui-checkbox" type = "checkbox" name="checkedProduct" value="<%=cartItem.getCartItemId()%>">
 										</td>
+										<script>
+											document.getElementById("myForm").onsubmit = function() {
+												var checkboxes = document.querySelectorAll('input[type="checkbox"]');
+												var isChecked = false;
+
+												for (var i = 0; i < checkboxes.length; i++) {
+													if (checkboxes[i].checked) {
+														isChecked = true;
+														break;
+													}
+												}
+
+												if (!isChecked) {
+													alert("Please select at least one product.");
+													return false; // Prevent form submission
+												}
+											};
+										</script>
 
 										<td class="column-1">
 											<a href="cart?action=removeCart&cartItemId=<%=cartItem.getCartItemId()%>">
-												<script>
-
-												</script>
 												<div class="how-itemcart1" >
 													<% String itemCartVariable = "images/item_cart/item-cart-0" + product.getProductId() + ".jpg"; %>
 													<img src="<%= itemCartVariable %>" alt="IMG">
@@ -133,7 +147,6 @@
 									Proceed Order
 								</div>
 							</button>
-							<%--<a href="order?action=checkOrder">Proceed Order</a>--%>
 						</div>
 					</div>
 				</div>

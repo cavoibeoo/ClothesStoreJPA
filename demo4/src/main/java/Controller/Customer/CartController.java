@@ -48,9 +48,9 @@ public class CartController extends HttpServlet {
         }
         else if (action.equalsIgnoreCase("addCart")){
             addCart(req,resp);
+            
         }
         else if (action.equalsIgnoreCase("getDetails")){
-//            getDetails(req, resp);
             getCart(req,resp);
         }
         else if (action.equalsIgnoreCase("removeCart")){
@@ -60,16 +60,22 @@ public class CartController extends HttpServlet {
     }
     
     public static void getCart(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        HttpSession session = req.getSession();
-        CustomerService customerService = new CustomerServiceImpl();
-        CartService cartService = new CartServiceImpl();
-        CartItemService cartItemService = new CartItemServiceImpl();
-        
-        CustomerEntity customerEntity = (CustomerEntity) session.getAttribute("user");
-        
-        Cart cart = cartService.findByCustomerId(customerEntity.getCustomerId());
-        List<CartItem> cartItemList = cartItemService.findByCartId(cart.getCartId());
-        session.setAttribute("cart",cartItemList);
+        try {
+            HttpSession session = req.getSession();
+            CustomerService customerService = new CustomerServiceImpl();
+            CartService cartService = new CartServiceImpl();
+            CartItemService cartItemService = new CartItemServiceImpl();
+    
+            CustomerEntity customerEntity = (CustomerEntity) session.getAttribute("user");
+    
+            Cart cart = cartService.findByCustomerId(customerEntity.getCustomerId());
+            List<CartItem> cartItemList = cartItemService.findByCartId(cart.getCartId());
+            session.setAttribute("cart",cartItemList);
+        } catch(Exception ex)
+        {
+            ex.printStackTrace();
+            req.setAttribute("error","Error: "+ ex.getMessage());
+        }
     }
     
     protected void addCart(HttpServletRequest req, HttpServletResponse resp)
@@ -78,12 +84,12 @@ public class CartController extends HttpServlet {
         int quantity = Integer.parseInt(req.getParameter("quantity"));
         int size = Integer.parseInt(req.getParameter("size"));
         int color = Integer.parseInt(req.getParameter("color"));
-    
+        
         HttpSession session = req.getSession();
         CustomerEntity customerEntity = (CustomerEntity) session.getAttribute("user");
         
         Cart cart = cartService.findByCustomerId(customerEntity.getCustomerId());
-    
+        
         ProductEntity modifiedProduct = productService.findByColorSize(productName, size, color);
         CartItem cartProduct = cartItemService.findItemInCart(cart.getCartId(), modifiedProduct);
         

@@ -139,6 +139,7 @@ public class OrderController extends HttpServlet {
             // Reduce the number of the product in stock
             ProductEntity productEntity = productService.findById(orderDetail.getProduct().getProductId());
             productEntity.setProductInventory(productEntity.getProductInventory() - orderDetail.getOrderDetailQuantity());
+            productService.update(productEntity);
         }
     }
     
@@ -153,6 +154,7 @@ public class OrderController extends HttpServlet {
             for (OrderDetail orderDetail1 : orderDetailList){
                 ProductEntity productEntity = productService.findById(orderDetail1.getProduct().getProductId());
                 productEntity.setProductInventory(productEntity.getProductInventory() + orderDetail1.getOrderDetailQuantity());
+                productService.update(productEntity);
             }
             orderService.update(orderEntity);
         }

@@ -85,7 +85,7 @@
                                                                                     <table id="order_details" class="table tableOrder">
                                                                                         <tbody><tr height="40px">
                                                                                             <th class="">Product</th>
-                                                                                            <th class="text-center">Product id</th>
+<%--                                                                                            <th class="text-center">Product id</th>--%>
                                                                                             <th class="text-center">Price</th>
                                                                                             <th class="text-center">Quantity</th>
                                                                                             <th class="total text-right">Total</th>
@@ -109,7 +109,7 @@
                                                                                                 <br>
                                                                                                 <%=product.getProductName()%>
                                                                                                 <br>
-                                                                                                <span class="variant_acc"><%="Size: " + product.getSize().getSizeName() + "/Color: " + product.getColor().getColorName() %></span>
+                                                                                                <span class="variant_acc"><%="Size: " + product.getSize().getSizeName() + " / Color: " + product.getColor().getColorName() %></span>
 
                                                                                             </td>
                                                                                             <%--<td class="sku text-center">STDT003</td>--%>
@@ -171,7 +171,7 @@
                                             <td class="column-3"> <%= tmpStatus %></td>
 
                                             <td class="column-4">
-                                                <c:if test="${tmpStatus ne 'Cancel'}">
+                                                <c:if test="${tmpStatus ne 'Cancel' and tmpStatus ne 'Complete'}">
                                                     <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#verticalycentered<%=order.getOrderId()%>">Cancel</button>
                                                 </c:if>
                                                 <div class="modal fade" id="verticalycentered<%=order.getOrderId()%>" tabindex="-1" aria-hidden="true" style="display: none; position: fixed; top: 150px; left: 0; width: 100%; height: 80vh;">
@@ -182,7 +182,7 @@
                                                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                             </div>
                                                             <div class="modal-body">
-                                                                Are you sure you want to cancel this order? please check carefully brfore taking this action.
+                                                                Are you sure you want to cancel this order? please check carefully before taking this action.
                                                             </div>
                                                             <div class="modal-footer">
                                                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
