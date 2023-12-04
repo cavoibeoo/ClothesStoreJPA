@@ -1,5 +1,6 @@
 package Controller.Customer;
 
+import JpaConfig.JpaConfig;
 import Service.CartItemService;
 import Service.OrderDetailsService;
 import Service.OrderService;
@@ -34,7 +35,7 @@ public class OrderController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         getOrders(req, resp);
-        
+        String url = "/customer-account.jsp";
         String action = req.getParameter("action");
         if (action != null){
             // If current user confirm the oder then create the order
@@ -42,9 +43,7 @@ public class OrderController extends HttpServlet {
                 action = "create";
             }
             if (action.equalsIgnoreCase("checkOrder")){
-                checkOrder(req,resp);
-                req.getRequestDispatcher("/orderdetails.jsp").forward(req, resp);
-                return;
+                url = checkOrder(req,resp);
             }
             else if (action.equalsIgnoreCase("create")){
                 createOrder(req, resp);
@@ -53,7 +52,6 @@ public class OrderController extends HttpServlet {
                 cancelOrder(req, resp);
             }
         }
-        String url = "/customer-account.jsp";
         req.getRequestDispatcher(url).forward(req, resp);
     }
     
@@ -66,20 +64,35 @@ public class OrderController extends HttpServlet {
         session.setAttribute("customerOrders", customerOrders);
     }
     
-    protected void checkOrder(HttpServletRequest req, HttpServletResponse resp)
+    protected String checkOrder(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException{
         HttpSession session = req.getSession();
         String[] checkedProducts = req.getParameterValues("checkedProduct");
         List<CartItem> proceedProduct = new ArrayList<>();
+        
         for (int i=0; i<checkedProducts.length; i++) {
-            proceedProduct.add(cartItemService.findById(Integer.parseInt(checkedProducts[i])));
+            CartItem cartItem = cartItemService.findById(Integer.parseInt(checkedProducts[i]));
+            ProductEntity productEntity = productService.findById(cartItem.getProduct().getProductId());
+            if (cartItem.getCartItemQuantity() > productEntity.getProductInventory()){
+                String message = "Product '" + productEntity.getProductName()
+                                         +" (" + productEntity.getSize().getSizeName()
+                                         + " / " + productEntity.getColor().getColorName() +")' is out of stock";
+        
+                req.setAttribute("isOutOfStock",true);
+                req.setAttribute("outOfStockMessage",message);
+                return "shopping-cart.jsp";
+            }
+            proceedProduct.add(cartItem);
         }
+        
         float tempPrice = 0;
         for (CartItem cartItem : proceedProduct){
             tempPrice += cartItem.getCartItemUnitPrice();
         }
         session.setAttribute("tempOrderPrice",tempPrice);
         session.setAttribute("tempOrder", proceedProduct);
+        
+        return "/orderdetails.jsp";
     }
     
     protected void createOrder(HttpServletRequest req, HttpServletResponse resp)
@@ -91,6 +104,19 @@ public class OrderController extends HttpServlet {
         List<CartItem> products = (List<CartItem>) session.getAttribute("tempOrder");
         float tempPrice = (float) session.getAttribute("tempOrderPrice");
         
+        //Check stock
+        for (CartItem cartItem : products){
+            ProductEntity productEntity = productService.findById(cartItem.getProduct().getProductId());
+            if (cartItem.getCartItemQuantity() > productEntity.getProductInventory()){
+                String message = "Product '" + productEntity.getProductName()
+                                         +" (" + productEntity.getSize().getSizeName()
+                                         + " / " + productEntity.getColor().getColorName() +")' is out of stock";
+                
+                req.setAttribute("isOutOfStock",true);
+                req.setAttribute("outOfStockMessage",message);
+                return;
+            }
+        }
         // Create order
         OrderEntity order = new OrderEntity();
         order.setCustomer(user);
@@ -121,8 +147,15 @@ public class OrderController extends HttpServlet {
         HttpSession session = req.getSession();
         int orderId = Integer.parseInt(req.getParameter("orderId")) ;
         OrderEntity orderEntity = orderService.findById(orderId);
-        orderEntity.setOrderStatus("Cancel");
-        orderService.update(orderEntity);
+        if (orderEntity.getOrderStatus() == null) {
+            orderEntity.setOrderStatus("Cancel");
+            List<OrderDetail> orderDetailList = orderDetailsService.findByOrderId(orderEntity.getOrderId());
+            for (OrderDetail orderDetail1 : orderDetailList){
+                ProductEntity productEntity = productService.findById(orderDetail1.getProduct().getProductId());
+                productEntity.setProductInventory(productEntity.getProductInventory() + orderDetail1.getOrderDetailQuantity());
+            }
+            orderService.update(orderEntity);
+        }
     }
     
     @Override

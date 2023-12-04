@@ -18,6 +18,7 @@ public class ProductEntity {
     private float productRating;
     private int productInventory;
     boolean isActivated;
+    private String productStyle;
     
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     private SizeEntity size;
@@ -29,9 +30,10 @@ public class ProductEntity {
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinColumn(name = "categoryId")
     private CategoryEntity category;
+    
     @OneToMany(mappedBy="product", cascade = CascadeType.MERGE)
     private List<ImageEntity> images;
-    private String productStyle;
+    
     
     public ProductEntity() {
     }

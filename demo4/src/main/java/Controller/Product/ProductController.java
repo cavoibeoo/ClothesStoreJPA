@@ -7,6 +7,7 @@ import Service.impl.CategoryServiceImpl;
 import Service.impl.ImageServiceImpl;
 import Service.impl.ProductServiceImpl;
 import model.ProductEntity;
+import model.Review;
 
 import javax.persistence.*;
 import javax.servlet.ServletException;
@@ -55,10 +56,12 @@ public class ProductController extends HttpServlet {
     protected void getDetails(HttpServletRequest req, HttpServletResponse resp)
             throws  IOException,ServletException{
         try {
-            int productId = Integer.parseInt(req.getParameter("productId")) ;
+            int productId = Integer.parseInt(req.getParameter("productId"));
             ProductEntity productEntity = productService.findById(productId);
-            if (productEntity != null)
+            if (productEntity != null){
                 req.setAttribute("product", productEntity);
+                ReviewController.getReview(req, resp);
+            }
             else {
                 String message = "Error item not found>";
                 req.setAttribute("error",message);

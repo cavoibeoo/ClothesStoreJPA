@@ -5,26 +5,27 @@ import javax.persistence.*;
 @Entity
 public class Review {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int reviewId;
     private String reviewContent;
+    private int rating;
     
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinColumn(name="customerId")
     CustomerEntity customer;
     
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinColumn(name="productId")
     ProductEntity product;
     
     public Review() {
     }
 
-    public Review(int reviewId, String reviewContent, CustomerEntity customer, ProductEntity product) {
-        this.reviewId = reviewId;
+    public Review( String reviewContent, CustomerEntity customer, ProductEntity product, int rating) {
         this.reviewContent = reviewContent;
         this.customer = customer;
         this.product = product;
+        this.rating = rating;
     }
 
 
@@ -43,7 +44,15 @@ public class Review {
     public void setReviewContent(String reviewContent) {
         this.reviewContent = reviewContent;
     }
-
+    
+    public int getRating() {
+        return rating;
+    }
+    
+    public void setRating(int rating) {
+        this.rating = rating;
+    }
+    
     public CustomerEntity getCustomer() {
         return customer;
     }

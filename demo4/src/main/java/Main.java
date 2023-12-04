@@ -3,9 +3,11 @@ import JpaConfig.JpaConfig;
 import Service.CartItemService;
 import Service.OrderDetailsService;
 import Service.OrderService;
+import Service.ReviewService;
 import Service.impl.CartItemServiceImpl;
 import Service.impl.OrderDetailServiceImpl;
 import Service.impl.OrderServiceImpl;
+import Service.impl.ReviewServiceImpl;
 import model.*;
 import org.hibernate.Transaction;
 
@@ -24,39 +26,15 @@ public class Main {
         OrderService orderService = new OrderServiceImpl();
         OrderDetailsService orderDetailsService = new OrderDetailServiceImpl();
         CartItemService cartItemService = new CartItemServiceImpl();
-        
-        
-/*        CustomerService customerService = new CustomerServiceImpl();
-        CustomerEntity customerEntity = customerService.findById(6);
- 
-        Cart cart = new Cart();
-        cart.setCustomer(customerEntity);
         EntityManager entityManager = JpaConfig.getEntityManager();
-        entityManager.getTransaction().begin();
-        entityManager.merge(cart);
-        entityManager.getTransaction().commit();*/
-        
-/*        EntityManager entityManager = JpaConfig.getEntityManager();
         EntityTransaction transaction = entityManager.getTransaction();
+        ReviewService reviewService = new ReviewServiceImpl();
         
-        entityManager.getTransaction().begin();
-        long in = 12;
-        String jpql = "DELETE  FROM CartItem where cartItemId = :id";
-        Query query = entityManager.createQuery(jpql);
-        query.setParameter("id",in);
-        int row = query.executeUpdate();
-        entityManager.getTransaction().commit();*/
-    
-        EntityManager enma = JpaConfig.getEntityManager();
-        String jpql = "SELECT p FROM ProductEntity p WHERE p.productName = :productName " +
-                              "AND p.size.sizeId = :sizeId AND p.color.colorId = :colorId ";
-        TypedQuery<ProductEntity> query = enma.createQuery(jpql,ProductEntity.class);
-        query.setParameter("productName", "Quan 1");
-        query.setParameter("sizeId", 2);
-        query.setParameter("colorId", 1);
-        List<ProductEntity> productEntityList = query.getResultList();
-        for (ProductEntity productEntity : productEntityList){
-            System.out.println(productEntity.getProductId());
-        }
+        CustomerEntity customerEntity = JpaConfig.getEntityManager().find(CustomerEntity.class, 6);
+        ProductEntity productEntity = JpaConfig.getEntityManager().find(ProductEntity.class, 3);
+        /*Review review = new Review("This is so good",customerEntity, productEntity, 5);
+        reviewService.insert(review);*/
+        boolean isBuy = reviewService.isBought(customerEntity, productEntity);
+        System.out.println(isBuy);
     }
 }

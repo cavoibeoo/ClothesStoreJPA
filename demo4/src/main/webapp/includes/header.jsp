@@ -272,7 +272,9 @@
 
             <div class="header-cart-content flex-w js-pscroll">
                 <ul class="header-cart-wrapitem w-full">
-                    <%if (session.getAttribute("user")!=null){
+                    <%
+                    float tmpSum = 0;
+                    if (session.getAttribute("user")!=null){
                         for (CartItem cartItem : products){
                             ProductEntity product = cartItem.getProduct();
                     %>
@@ -288,8 +290,13 @@
                                     <%=product.getProductName()%>
                                 </a>
 
+                                <%
+                                tmpSum += product.getProductPrice()*cartItem.getCartItemQuantity();
+                                %>
+
                                 <span class="header-cart-item-info">
                                 <%=cartItem.getCartItemQuantity()%> x $<%=product.getProductPrice()%>
+                                    (<%=product.getSize().getSizeName()%> / <%=product.getColor().getColorName()%>)
                             </span>
                             </div>
                         </li>
@@ -297,7 +304,7 @@
                     <%}%>
                 <div class="w-full">
                     <div class="header-cart-total w-full p-tb-40">
-                        Total: $30
+                        Total: $<%=tmpSum%>>
                     </div>
 
                     <div class="header-cart-buttons flex-w w-full">
@@ -310,7 +317,6 @@
                         </a>
                     </div>
                 </div>
-
             </div>
         </div>
     </div>

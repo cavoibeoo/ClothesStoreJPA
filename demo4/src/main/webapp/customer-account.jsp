@@ -189,7 +189,6 @@
                                                                 <a href="order?action=cancel&orderId=<%=order.getOrderId()%>">
                                                                     <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Yes, Cancel this order</button>
                                                                 </a>
-
                                                             </div>
                                                         </div>
                                                     </div>
@@ -199,6 +198,38 @@
                                         <% } %>
                                         <% } %>
                                         <tbody>
+
+                                        <c:if test="${isOutOfStock eq true}">
+                                            <!-- JavaScript to trigger the click event when the page loads -->
+                                            <button id="cancelButtonSpecial" type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#verticalycenteredSpecial" style="display: none;"></button>
+                                            <script>
+                                                window.onload = function() {
+                                                    // Get the button element by its ID
+                                                    var cancelButton = document.getElementById('cancelButtonSpecial');
+
+                                                    // Simulate a click event on the button
+                                                    cancelButton.click();
+                                                };
+                                            </script>
+
+                                            <div class="modal fade" id="verticalycenteredSpecial" tabindex="-1" aria-hidden="true" style="display: none; position: fixed; top: 150px; left: 0; width: 100%; height: 80vh;">
+                                                <div class="modal-dialog modal-dialog-centered">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title">CREATING ORDER FAILED</h5>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            ${outOfStockMessage}
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </c:if>
+
                                         <c:if test="${customerOrders == null}">
                                             <tr>
                                                 <td colspan="6"><p style="color: #666666">There are no order.</p></td>

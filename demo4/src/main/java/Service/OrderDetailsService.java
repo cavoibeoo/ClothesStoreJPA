@@ -17,6 +17,8 @@ public interface OrderDetailsService {
     
     List<OrderDetail> findAll();
     
+    List<OrderDetail> findByCustomerId(int customerId);
+    
     int count();
     
 }

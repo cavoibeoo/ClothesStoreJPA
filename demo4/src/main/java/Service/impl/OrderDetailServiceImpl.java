@@ -71,6 +71,15 @@ public class OrderDetailServiceImpl implements OrderDetailsService {
     }
     
     @Override
+    public List<OrderDetail> findByCustomerId(int customerId) {
+        EntityManager enma = JpaConfig.getEntityManager();
+        String jpql = "SELECT o FROM OrderDetail o where o.order.customer.customerId = :id";
+        TypedQuery<OrderDetail> query = enma.createQuery(jpql, OrderDetail.class);
+        query.setParameter("id", customerId);
+        return query.getResultList();
+    }
+    
+    @Override
     public int count() {
         return 0;
     }
