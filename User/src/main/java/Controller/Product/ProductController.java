@@ -32,6 +32,7 @@ public class ProductController extends HttpServlet {
     
     ProductService productService = new ProductServiceImpl();
     CategoryService categoryService = new CategoryServiceImpl();
+    ImageService imageService = new ImageServiceImpl();
     
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -41,6 +42,7 @@ public class ProductController extends HttpServlet {
             getShop(req, resp);
             req.getRequestDispatcher("/product.jsp").forward(req, resp);
         }
+        
         else if (action.equalsIgnoreCase("getDetails")){
             getDetails(req, resp);
             req.getRequestDispatcher("/product-detail.jsp").forward(req, resp);
@@ -59,12 +61,6 @@ public class ProductController extends HttpServlet {
             filterByOrder(req,resp);
             req.getRequestDispatcher("/product.jsp").forward(req,resp);
         }
-        req.getRequestDispatcher("/product.jsp").forward(req, resp);
-    }
-    
-    @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        doPost(req, resp);
     }
     
     protected void getShop(HttpServletRequest req, HttpServletResponse resp)
@@ -153,5 +149,8 @@ public class ProductController extends HttpServlet {
             req.setAttribute("error","Error"+ex.getMessage());
         }
     }
-    
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        doPost(req, resp);
+    }
 }

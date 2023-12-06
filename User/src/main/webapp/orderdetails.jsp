@@ -217,8 +217,8 @@
                                     <td class="product-image">
                                         <div class="product-thumbnail">
                                             <div class="product-thumbnail-wrapper">
-
-                                                <img class="product-thumbnail-image" alt="T-shirt" src="data:image/jpeg;base64,<%=product.getProduct().getImages().get(0).getProductImage()%>">
+                                                <%String img_src = "images/item_cart/item-cart-0" + product.getProduct().getProductId()  + ".jpg";%>
+                                                <img class="product-thumbnail-image" alt="T-shirt" src="<%=img_src%>">
                                             </div>
                                             <span class="product-thumbnail-quantity" aria-hidden="true"><%=product.getCartItemQuantity()%></span>
                                         </div>

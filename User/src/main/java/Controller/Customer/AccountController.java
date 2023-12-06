@@ -42,12 +42,7 @@ public class AccountController extends HttpServlet {
                 .getRequestDispatcher(url)
                 .forward(request, response);
     }
-    
-    @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        doPost(req,resp);
-    }
-    
+
     protected String edit (HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException{
         String url;

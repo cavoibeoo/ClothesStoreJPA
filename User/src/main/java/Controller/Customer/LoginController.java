@@ -26,7 +26,8 @@ public class LoginController extends HttpServlet {
     EntityManager entityManager = entityManagerFactory.createEntityManager();
     EntityTransaction transaction = entityManager.getTransaction();
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+    protected void doPost(HttpServletRequest request,
+                          HttpServletResponse response)
             throws ServletException, IOException {
 
         String url = "/login.jsp";
@@ -58,14 +59,7 @@ public class LoginController extends HttpServlet {
                 .getRequestDispatcher(url)
                 .forward(request, response);
     }
-    
-    @Override
-    protected void doGet(HttpServletRequest request,
-                         HttpServletResponse response)
-            throws ServletException, IOException {
-        doPost(request, response);
-    }
-    
+
     protected String go (HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException{
         String message = null;
@@ -245,7 +239,14 @@ public class LoginController extends HttpServlet {
         String url = "/Home.jsp";
         return url;
     }
-    
+
+
+    @Override
+    protected void doGet(HttpServletRequest request,
+                         HttpServletResponse response)
+            throws ServletException, IOException {
+        doPost(request, response);
+    }
 }
 
 
