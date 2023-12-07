@@ -109,7 +109,7 @@ public class OrderController extends HttpServlet {
         order.setOrderDiscount(0);
         order.setOrderTotal(tempPrice - tempPrice*order.getOrderDiscount() + order.getOrderShipping());
         order.setOrderPaymentMethod("COD");
-        if (tmpAddr.contains("null")) order.setShippingAddress(user.getCustomerAddress());
+        if (tmpAddr.contains("Choose") || tmpAddr.contains("null")) order.setShippingAddress(user.getCustomerAddress());
         else order.setShippingAddress(tmpAddr);
         orderService.create(order);
         
